@@ -76,29 +76,34 @@
           <hr>
           <div class="column">
             
-  <div class="menu">
-    <p class="menu-label">
-      Archive
-    </p>
-    <ul class="menu-list">
-      
-      <li>
-         <a href="/post/highjacking_pop/">Hijacking Pop!_OS &nbsp &nbsp <em>(<time>February 19, 2020</time>)</em></a>
-      </li>
-      
-      <li>
-         <a href="/post/gentoo_microbit/">Accessing the BBC micro:bit REPL on Gentoo &nbsp &nbsp <em>(<time>February 9, 2019</time>)</em></a>
-      </li>
-      
-      <li>
-         <a href="/post/traefik2/">Host all the Hidden Services with Traefik &nbsp &nbsp <em>(<time>November 16, 2018</time>)</em></a>
-      </li>
-      
-      <li>
-         <a href="/post/traefik/">Docker, Traefik and Tor Hidden services &nbsp &nbsp <em>(<time>September 2, 2018</time>)</em></a>
-      </li>
-      
-    </ul>
+  <div class="content">
+    <h1>Accessing the BBC micro:bit REPL on Gentoo</h1>
+<p><em>February 9, 2019</em></p>
+<p><img src="/static/images/microbit_repl.png" alt="">
+Thanks to the <a href="https://ncss.edu.au/">National Computer Science School</a> I'm
+now the proud owner of a <a href="https://microbit.org/">BBC micro:bit</a>. The
+micro:bit has the ability to provide a python REPL over USB serial but
+when plugging it into my Gentoo machine, the micro:bit doesn't show up in
+<code>/dev</code>. What gives?</p>
+<p>Like most things, a kernel module is required to provide the drivers for
+the USB serial interface. On first inspection you would think that
+<code>CONFIG_USB_SERIAL_CONSOLE</code> is the correct module, but no. The micro:bit's
+REPL is actually treated as a USB modem which requires <code>CONFIG_USB_ACM</code> to
+be set.</p>
+<h4>Kernel</h4>
+<pre><code>Device Drivers ---&gt;
+  [*]  USB Support ---&gt;
+    &lt;*&gt;  USB Modem (CDC ACM) support</code></pre><p>Now that the module is enabled, <a href="https://wiki.gentoo.org/wiki/Kernel/Rebuild">rebuild the
+kernel</a> and reboot.</p>
+<p>Once rebooted plug in the micro:bit and there should be a new device in <code>/dev</code>
+called <code>/dev/ttyACM0</code> (or something similar). Now it's as simple as
+connecting to your micro:bit REPL using your serial console client of choice!</p>
+<div class="highlight"><pre><span></span>picocom /dev/ttyACM0 -b <span class="m">115200</span>
+</pre></div>
+<p><a href="https://microbit-micropython.readthedocs.io/en/latest/devguide/repl.html">The micro:bit documentation as some more examples.</a></p>
+<p>Happy hacking.</p>
+<p>H</p>
+
   </div>
 
             <footer class="footer">
